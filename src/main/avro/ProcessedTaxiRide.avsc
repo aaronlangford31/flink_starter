@@ -1,0 +1,29 @@
+{
+    "namespace": "com.instructure.pandata.flink_starter.data",
+    "name": "ProcessedTaxiRide",
+    "type": "record",
+    "fields": [
+        {"name":"VendorID", "type": "int"},
+        {"name":"PickUpTimestamp", "type": "long"},
+        {"name":"DropOffTimestamp", "type": "long"},
+        {"name":"PassengerCount", "type": "int"},
+        {"name":"TripDistance", "type": "float"},
+        {"name":"PickUpLocationId", "type": "int"},
+        {"name":"DropOffLocationId", "type": "int"},
+        {
+            "name": "RidePaymentType",
+            "type": {
+                "name": "PaymentType",
+                "type": "enum",
+                "symbols": ["Cash", "Credit", "Debit", "Other"]
+            }
+        },
+        {"name":"FareAmount", "type": "float"},
+        {"name":"Extra", "type": "float"},
+        {"name":"MtaTax", "type": "float"},
+        {"name":"TipAmount", "type": "float"},
+        {"name":"TollsAmount", "type": "float"},
+        {"name":"ImprovementSurcharge", "type": "float"},
+        {"name":"TotalAmount", "type": "float"}
+    ]
+}

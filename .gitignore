@@ -1,0 +1,23 @@
+### SBT ###
+
+target/
+project/project/
+project/target/
+project/plugins/project/
+.history
+.cache
+.lib/
+
+### Scala ###
+*.class
+*.log
+
+### Intellij ###
+.idea/
+mainRunner/
+
+### Avro ###
+*.avro
+
+### Project Specific ###
+nyc_taxi_data/data/
