@@ -1,21 +1,15 @@
 import argparse
-import avro.schema
-from avro.datafile import DataFileReader
-from avro.io import DatumReader
+import csv
 import boto3
 from datetime import datetime
 import json
 import time
 
-def get_schema(path_to_schema):
-    contents = open(path_to_schema).read()
-    return avro.schema.parse(contents)
-
 def load_data(path_to_data, avro_schema):
     f = open(path_to_data)
-    avro_reader = DataFileReader(f, DatumReader())
-    
-    for record in avro_reader:
+    csv_reader = csv.DictReader(f)
+
+    for record in csv_reader:
         yield record
 
 def send_data(key, record, kinesis, stream_name):
@@ -27,18 +21,19 @@ def send_data(key, record, kinesis, stream_name):
 
     print("sent {}".format(record))
 
-__TIME_FMT__ = '%Y-%m-%d %I:%M:%S'
+__TIME_FMT__ = '%Y-%m-%d %H:%M:%S'
 __PARTITION_KEY__ = 'VendorID'
 def run_simulation(data, kinesis, stream_name, time_multiplier):
     print("running simulation")
     last = datetime.strptime(data.next()['tpep_pickup_datetime'], __TIME_FMT__)
     for record in data:
         curr = datetime.strptime(record['tpep_pickup_datetime'], __TIME_FMT__)
-        time.sleep((curr - last).total_seconds() / time_multiplier)
+        wait_for = (curr - last).total_seconds() / time_multiplier
+        time.sleep(wait_for if wait_for >= 0.0 else 0.0)
 
         send_data(str(record[__PARTITION_KEY__]), json.dumps(record), kinesis, stream_name)
         last = curr
-      
+
 
 def main(args):
     kinesis = boto3.client('kinesis')
@@ -54,14 +49,9 @@ if __name__ == '__main__':
         help='the name of the Kinesis stream to send data to'
     )
     parser.add_argument(
-        'path_to_schema',
-        type=str,
-        help='the path to the .avsc that defines the schema of data for this simulation'
-    )
-    parser.add_argument(
         'path_to_data',
         type=str,
-        help='the path to the .avro file that contains the data for this simulation'
+        help='the path to the .csv file that contains the data for this simulation'
     )
     parser.add_argument(
         '--time_multiplier',
