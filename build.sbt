@@ -19,11 +19,11 @@ val avroDependencies = Seq(
 )
 
 val flinkDependencies = Seq(
-  "org.apache.flink" %% "flink-connector-kinesis" % "1.5-SNAPSHOT",
-  "org.apache.flink" %% "flink-scala"             % flinkVersion % "provided",
-  "org.apache.flink" %% "flink-streaming-scala"   % flinkVersion % "provided",
-  "org.apache.flink" %% "flink-table"             % flinkVersion,
-  "org.apache.flink" %% "flink-test-utils"        % flinkVersion
+  "org.apache.flink" %% "flink-connector-kinesis"    % "1.5-SNAPSHOT",
+  "org.apache.flink" %% "flink-scala"                % flinkVersion % "provided",
+  "org.apache.flink" %% "flink-streaming-scala"      % flinkVersion % "provided",
+  "org.apache.flink" %% "flink-table"                % flinkVersion,
+  "org.apache.flink" %% "flink-test-utils"           % flinkVersion
 )
 
 val testDependencies = Seq(
@@ -52,7 +52,7 @@ Global / cancelable := true
 assembly / assemblyOption := (assembly / assemblyOption).value.copy(includeScala = false)
 
 assemblyMergeStrategy in assembly := {
-  case "log4j.properties"                                          => MergeStrategy.last
+  case "log4j.properties" => MergeStrategy.last
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)

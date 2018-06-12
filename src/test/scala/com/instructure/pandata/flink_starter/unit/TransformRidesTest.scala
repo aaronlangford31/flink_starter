@@ -1,7 +1,12 @@
 package com.instructure.pandata.flink_starter.unit
 
 import com.instructure.pandata.flink_starter.data
-import com.instructure.pandata.flink_starter.data.{PaymentType, ProcessedTaxiRide, RawTaxiRide, YesNo}
+import com.instructure.pandata.flink_starter.data.{
+  PaymentType,
+  ProcessedTaxiRide,
+  RawTaxiRide,
+  YesNo
+}
 import com.instructure.pandata.flink_starter.streaming.operators.TransformRides
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
@@ -106,8 +111,8 @@ class TransformRidesTest extends FlatSpec with Matchers {
     val result1 = transformRides.transform(pickupMalformed)
     val result2 = transformRides.transform(dropoffMalformed)
 
-    result1.isFailure should be (true)
-    result2.isFailure should be (true)
+    result1.isFailure should be(true)
+    result2.isFailure should be(true)
   }
 
   it should "map payment type integers to PaymentType enums" in {
@@ -193,10 +198,10 @@ class TransformRidesTest extends FlatSpec with Matchers {
       1.0f
     )
 
-    val cashResult = transformRides.transform(cashRide)
+    val cashResult   = transformRides.transform(cashRide)
     val creditResult = transformRides.transform(creditRide)
-    val debitResult = transformRides.transform(debitRide)
-    val otherResult = transformRides.transform(otherRide)
+    val debitResult  = transformRides.transform(debitRide)
+    val otherResult  = transformRides.transform(otherRide)
 
     cashResult.success.value.RidePaymentType shouldEqual data.PaymentType.Cash
     creditResult.success.value.RidePaymentType shouldEqual data.PaymentType.Credit
